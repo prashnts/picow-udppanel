@@ -10,7 +10,7 @@
 
 #include "config.h"
 
-#define BROKER_HOST "192.168.1.10"
+#define BROKER_HOST "10.0.1.80"
 #define BROKER_PORT 1883
 #define BROKER_KEEPALIVE 60
 #define TOPIC         "rgbmatrix/#"         // <== This is what we subscribe to

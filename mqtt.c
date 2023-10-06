@@ -23,14 +23,14 @@ void mqtt_setup_client() {
 
 int inpub_id;
 
-static void mqtt_incoming_publish_cb( __attribute__((unused)) void *arg, 
-                                      const char *topic, 
+static void mqtt_incoming_publish_cb( __attribute__((unused)) void *arg,
+                                      const char *topic,
                                       __attribute__((unused)) u32_t tot_len) {
     inpub_id = ID_UNKNOWN;
     if(strcmp(topic, URGENT_TOPIC) == 0) {
         inpub_id = ID_URGENT;
         return;
-    } 
+    }
     for (int i = 0; i < INFO_ITEM_COUNT; ++i) {
         if (strcmp(topic, info_items[i].topic) == 0) {
             inpub_id = i;
@@ -41,7 +41,7 @@ static void mqtt_incoming_publish_cb( __attribute__((unused)) void *arg,
     if(strcmp(topic, MQTT_CONTROL_TOPIC) == 0) {
         inpub_id = ID_CONTROL;
         return;
-    } 
+    }
     printf("DEBUG: Unmatched topic >>>%s<<< - ignoring\n", topic);
 }
 
@@ -55,11 +55,11 @@ static void mqtt_incoming_data_cb(__attribute__((unused)) void *arg, const u8_t 
             strncpy((char *)&payload, (const char *)data, (size_t) len);
             payload[len] = '\0';
             show_data(inpub_id, payload, len);
-            // printf("DEBUG: Payload: %s\n", payload); 
+            // printf("DEBUG: Payload: %s\n", payload);
         } else {
             printf("WARNING: Received fragmented MQTT payload - ignoring it\n");
         }
-    } 
+    }
 }
 
 static void mqtt_sub_request_cb(__attribute__((unused)) void *arg, err_t result) {
@@ -90,7 +90,7 @@ static void mqtt_connection_cb(mqtt_client_t *client, void *arg, mqtt_connection
 void mqtt_connect() {
     struct mqtt_connect_client_info_t ci;
     err_t err;
-  
+
     /* Setup an empty client info structure */
     memset(&ci, 0, sizeof(ci));
 

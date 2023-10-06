@@ -57,11 +57,11 @@ uint32_t getFreeHeap(void) {
 
 void show_urgent() {
     if (showing_urgent) {
-        show_6x10_string(*ii_image, 
-                        urgent_msg, 
-                        urgent_item.x, 
-                        urgent_item.y, 
-                        string2rgb(urgent_item.fg), 
+        show_6x10_string(*ii_image,
+                        urgent_msg,
+                        urgent_item.x,
+                        urgent_item.y,
+                        string2rgb(urgent_item.fg),
                         string2rgb(urgent_item.bg)
                         );
     }
@@ -71,51 +71,60 @@ void show_urgent() {
    It is intended to be used for the blink effect. */
 void hide_urgent() {
     if (showing_urgent) {
-        show_6x10_string(*ii_image, 
-                urgent_msg, 
-                urgent_item.x, 
-                urgent_item.y, 
-                BLACK, 
+        show_6x10_string(*ii_image,
+                urgent_msg,
+                urgent_item.x,
+                urgent_item.y,
+                BLACK,
                 BLACK
                 );
     }
 }
 
 void show_data(int id, const char *data, int len) {
+    return;
     if (id < INFO_ITEM_COUNT) { // handle msg on a subscribed topic
+        const uint32_t *imdata = (const uint32_t *)data;
+        for (int x = 0; x < 64; x++) {
+            for (int y = 0; y < 64; y++) {
+                // (*ii_image)[x][y] = rgb2bgr32(YELLOW); // imdata[x * 64 + y];
+                (*ii_image)[x][y] = imdata[x * 64 + y];
+            }
+        }
+        return;
         char info[WIDTH] = "";
         if (strlen(info_items[id].prefix) > 0) strcpy(info_items[id].prefix, info);
         strncat(info, data, len);
         if (strlen(info_items[id].suffix) > 0) strcat(info, info_items[id].suffix);
         if (strcmp(info_items[id].font, "3x5") == 0) {
             if (info_items[id].scale == 1) {
-                show_3x5_string(*ii_image, 
-                                info, 
-                                info_items[id].x, 
-                                info_items[id].y, 
-                                string2rgb(info_items[id].fg), 
+                show_3x5_string(*ii_image,
+                                info,
+                                info_items[id].x,
+                                info_items[id].y,
+                                string2rgb(info_items[id].fg),
                                 string2rgb(info_items[id].bg)
                             );
             } else {
-                show_6x10_string(*ii_image, 
-                                info, 
-                                info_items[id].x, 
-                                info_items[id].y, 
-                                string2rgb(info_items[id].fg), 
+                show_6x10_string(*ii_image,
+                                info,
+                                info_items[id].x,
+                                info_items[id].y,
+                                string2rgb(info_items[id].fg),
                                 string2rgb(info_items[id].bg)
                                 );
             }
         } else {
-            show_5x7_string(*ii_image, 
-                            info, 
-                            info_items[id].x, 
-                            info_items[id].y, 
-                            string2rgb(info_items[id].fg), 
+            show_5x7_string(*ii_image,
+                            info,
+                            info_items[id].x,
+                            info_items[id].y,
+                            string2rgb(info_items[id].fg),
                             string2rgb(info_items[id].bg)
                             );
         }
         return;
-    } 
+    }
     if (id == ID_CONTROL) {
         if (strcmp(data, "Off") == 0) {
             set_blank_display(true);
@@ -134,12 +143,12 @@ void show_data(int id, const char *data, int len) {
             strncpy(urgent_msg, data, WIDTH);
             show_urgent();
         } else {
-            hide_urgent();            
+            hide_urgent();
             showing_urgent = false;
         }
         return;
     }
-    
+
     // shouldn't get here
     printf("WARNING: Unexpected info item, not handled (in info_items.c)\n");
 }

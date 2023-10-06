@@ -40,15 +40,15 @@ target_compile_definitions(picowpanel PRIVATE
 	PICO_DEFAULT_UART_RX_PIN=29
 )
 
-target_compile_options(picowpanel PRIVATE -Werror -Wall -Wextra)
+target_compile_options(picowpanel PRIVATE -Wall -Wextra)
 
 pico_enable_stdio_usb(picowpanel 1)
 
-target_link_libraries(picowpanel 
-	pico_cyw43_arch_lwip_threadsafe_background 
+target_link_libraries(picowpanel
+	pico_cyw43_arch_lwip_threadsafe_background
 
 	pico_lwip_mqtt
-	pico_stdlib 
+	pico_stdlib
 	hardware_pio
 	pico_multicore
 )
